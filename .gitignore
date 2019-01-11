@@ -27,7 +27,6 @@ demo-angular/lib
 demo-angular/platforms
 node_modules
 publish/src
-publish/package
 demo/report/report.html
 demo/report/stats.json
 demo-angular/report/report.html
