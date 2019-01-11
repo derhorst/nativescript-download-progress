@@ -15,8 +15,9 @@ var common = require("tns-core-modules/http/http-request/http-request-common");
 global.onmessage = function(msg) {
     var url = msg.data.url;
     var destinationFilePath = msg.data.destinationFilePath;
+    var headers = msg.data.headers;
     var destinationFile;
-    
+
     var contentLength = 0;
     try{
         if(destinationFilePath){
@@ -32,6 +33,12 @@ global.onmessage = function(msg) {
         javaOptions.method = 'GET';
         var javaUrl = new java.net.URL(url);
         var connection = javaUrl.openConnection();
+        for (var key in headers) {
+          if (headers.hasOwnProperty(key)) {
+            connection.setRequestProperty(key, headers[key]);
+          }
+        }
+
         connection.connect();
         if (connection.getResponseCode() != java.net.HttpURLConnection.HTTP_OK) {
             throw "Server returned HTTP " + connection.getResponseCode();

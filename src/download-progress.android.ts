@@ -11,7 +11,7 @@ export class DownloadProgress {
         this.progressCallback = callback;
     }
 
-    public downloadFile(url: string, destinationFilePath?: string): Promise<fs.File> {
+    public downloadFile(url: string, destinationFilePath?: string, headers?: { [key:string]: string }): Promise<fs.File> {
         var worker;
         if (global["TNS_WEBPACK"]) {
             var WorkerScript = require("nativescript-worker-loader!./android-worker.js");
@@ -24,7 +24,7 @@ export class DownloadProgress {
             this.promiseResolve = resolve;
             this.promiseReject = reject;
 
-            worker.postMessage({ url: url, destinationFilePath: destinationFilePath });
+            worker.postMessage({ url: url, destinationFilePath: destinationFilePath, headers: headers});
             worker.onmessage = (msg:any)=> {
                 if(msg.data.progress) {
                     if(this.progressCallback) {
